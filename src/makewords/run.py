@@ -31,6 +31,7 @@ def possibleWords(allWords, charSet):
         if flag == 1:
             print(word)
   
+
 def runner(charSet):
     nltk.download('words')
     input = nltklib.words()
