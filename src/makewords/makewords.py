@@ -1,5 +1,5 @@
-#! python3
 import nltk
+import textwrap
 from nltk.corpus import words as nltklib 
 
 
@@ -10,13 +10,24 @@ def charCount(word):
     return dict
   
   
+def _print_message(s):
+    '''Handle terminal output consistently with nltk.'''
+    prefix = '[makewords] '
+    print(
+        textwrap.fill(
+            s,
+            initial_indent=prefix
+        )
+    )
+
 def possibleWords(letters, words=None):
     '''Identify the words that can be made from a list of letters.'''
     if words is None:
+        _print_message('Using words sourced from nltk.')
         nltk.download('words', download_dir='src/makewords/data', quiet=False)
         words = nltklib.words() # try to ensure words is a generator
     else:
-        print(words)
+        _print_message('Using words provided by user.')
     mustHave = letters[0]
     for word in words:
         flag = 1
