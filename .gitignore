@@ -1,5 +1,15 @@
+# Compiled files
 __pycache__/
 *.pyc
 
+# Packaging
+*.egg-info/
+
+# Editor
 .vscode
+
+# Environments
 venv/
+
+# Data
+**/data/corpora
