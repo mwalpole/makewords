@@ -1,6 +1,9 @@
-import nltk
+import os
 import textwrap
+
+import nltk
 from nltk.corpus import words as nltklib 
+from .config.const import ROOT_DIR
 
 
 def charCount(word):
@@ -20,12 +23,14 @@ def _print_message(s):
         )
     )
 
+
 def possibleWords(letters, words=None):
     '''Identify the words that can be made from a list of letters.'''
     if words is None:
-        _print_message('Using words sourced from nltk.')
-        nltk.download('words', download_dir='src/makewords/data', quiet=False)
-        words = nltklib.words() # try to ensure words is a generator
+        _print_message('Using en wordlist sourced from nltk.')
+        nltk_dir = os.path.join(ROOT_DIR, 'nltk_data')
+        nltk.download('words', download_dir=nltk_dir, quiet=False)
+        words = nltklib.words()
     else:
         _print_message('Using words provided by user.')
     mustHave = letters[0]
