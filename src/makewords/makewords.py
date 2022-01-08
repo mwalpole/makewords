@@ -1,18 +1,18 @@
-import os
 import textwrap
 
 import nltk
-from nltk.corpus import words as nltklib 
-from .config.const import ROOT_DIR
+from nltk.corpus import words as nltklib
+
+from makewords.conf import NLTK_DIR
 
 
 def charCount(word):
-    dict = {}
+    nchars = {}
     for i in word:
-        dict[i] = dict.get(i, 0) + 1
-    return dict
-  
-  
+        nchars[i] = nchars.get(i, 0) + 1
+    return nchars
+
+
 def _print_message(s):
     '''Handle terminal output consistently with nltk.'''
     prefix = '[makewords] '
@@ -26,10 +26,10 @@ def _print_message(s):
 
 def possibleWords(letters, words=None):
     '''Identify the words that can be made from a list of letters.'''
+    res = []
     if words is None:
         _print_message('Using en wordlist sourced from nltk.')
-        nltk_dir = os.path.join(ROOT_DIR, 'nltk_data')
-        nltk.download('words', download_dir=nltk_dir, quiet=False)
+        nltk.download('words', download_dir=NLTK_DIR, quiet=False)
         words = nltklib.words()
     else:
         _print_message('Using words provided by user.')
@@ -45,7 +45,9 @@ def possibleWords(letters, words=None):
             if key not in letters:
                 flag = 0
             # else:
-                # if letters.count(key) != chars[key]:
-                    # flag = 0
+            #     if letters.count(key) != chars[key]:
+            #         flag = 0
         if flag == 1:
             print(word)
+            res.append(word)
+    return res
