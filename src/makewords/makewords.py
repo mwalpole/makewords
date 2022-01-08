@@ -26,9 +26,11 @@ def _print_message(s):
 
 def possibleWords(letters, words=None):
     '''Identify the words that can be made from a list of letters.'''
+    assert len(letters) > 0, 'Must provide at least one letter.'
     res = []
     if words is None:
         _print_message('Using en wordlist sourced from nltk.')
+        # TODO add MANIFEST and set nltk DIR
         nltk.download('words', download_dir=NLTK_DIR, quiet=False)
         words = nltklib.words()
     else:
