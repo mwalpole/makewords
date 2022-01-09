@@ -12,6 +12,7 @@ ROOT_DIR = pathlib.Path(__file__).parent
 # The text of the README file
 README = (ROOT_DIR / "README.md").read_text()
 
+
 setup(
     name="makewords",
     long_description=README,

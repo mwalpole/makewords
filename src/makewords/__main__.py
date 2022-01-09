@@ -1,12 +1,7 @@
 import argparse
-import os
 import sys
 
 from makewords.makewords import possible_words
-
-from makewords.conf import NLTK_DIR
-
-os.environ['NLTK_DATA'] = NLTK_DIR
 
 
 def main(args=None):
@@ -21,4 +16,4 @@ def main(args=None):
 
 
 if __name__ == "__main__":  # pragma: no cov
-    main()  # pragma: no cov
+    sys.exit(main())  # pragma: no cov
