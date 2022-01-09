@@ -26,6 +26,11 @@ def test_empty_string():
         makewords.possibleWords("")
 
 
+def test_nltk():
+    output = makewords.possibleWords('make')
+    assert 'make' in output
+
+
 def test_main():
     process = subprocess.Popen([sys.executable, "-m", "makewords"], stdout=subprocess.PIPE)
     out, _ = process.communicate()
@@ -33,6 +38,5 @@ def test_main():
     assert out
 
 
-# def test_main_args():
-#     output = main(args=[LTRS_1, WREF_1])
-#     assert output == WREF_1
+def test_main_args():
+    pass

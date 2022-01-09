@@ -1,4 +1,3 @@
-import os
 import pathlib
 from glob import glob
 from os.path import basename
@@ -14,7 +13,7 @@ ROOT_DIR = pathlib.Path(__file__).parent
 README = (ROOT_DIR / "README.md").read_text()
 
 setup(
-    name="makewords", 
+    name="makewords",
     long_description=README,
     packages=find_packages('src'),
     package_dir={'': 'src'},

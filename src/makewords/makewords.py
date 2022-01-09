@@ -1,9 +1,6 @@
 import textwrap
 
-import nltk
 from nltk.corpus import words as nltklib
-
-from makewords.conf import NLTK_DIR
 
 
 def charCount(word):
@@ -30,8 +27,6 @@ def possibleWords(letters, words=None):
     res = []
     if words is None:
         _print_message('Using en wordlist sourced from nltk.')
-        # TODO add MANIFEST and set nltk DIR
-        nltk.download('words', download_dir=NLTK_DIR, quiet=False)
         words = nltklib.words()
     else:
         _print_message('Using words provided by user.')
