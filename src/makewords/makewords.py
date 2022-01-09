@@ -11,25 +11,20 @@ def charCount(word):
 
 
 def _print_message(s):
-    '''Handle terminal output consistently with nltk.'''
-    prefix = '[makewords] '
-    print(
-        textwrap.fill(
-            s,
-            initial_indent=prefix
-        )
-    )
+    """Handle terminal output consistently with nltk."""
+    prefix = "[makewords] "
+    print(textwrap.fill(s, initial_indent=prefix))
 
 
 def possibleWords(letters, words=None):
-    '''Identify the words that can be made from a list of letters.'''
-    assert len(letters) > 0, 'Must provide at least one letter.'
+    """Identify the words that can be made from a list of letters."""
+    assert len(letters) > 0, "Must provide at least one letter."
     res = []
     if words is None:
-        _print_message('Using en wordlist sourced from nltk.')
+        _print_message("Using en wordlist sourced from nltk.")
         words = nltklib.words()
     else:
-        _print_message('Using words provided by user.')
+        _print_message("Using words provided by user.")
     mustHave = letters[0]
     for word in words:
         flag = 1

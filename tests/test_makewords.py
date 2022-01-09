@@ -6,9 +6,9 @@ import pytest
 import makewords
 from makewords.__main__ import main
 
-LTRS_1 = 'fobar'
-WREF_1 = ['foobar', 'foob']
-LTRS_2 = 'baz'
+LTRS_1 = "fobar"
+WREF_1 = ["foobar", "foob"]
+LTRS_2 = "baz"
 
 
 def test_output_is_not_always_empty():
@@ -27,12 +27,14 @@ def test_empty_string():
 
 
 def test_nltk():
-    output = makewords.possibleWords('make')
-    assert 'make' in output
+    output = makewords.possibleWords("make")
+    assert "make" in output
 
 
 def test_main():
-    process = subprocess.Popen([sys.executable, "-m", "makewords"], stdout=subprocess.PIPE)
+    process = subprocess.Popen(
+        [sys.executable, "-m", "makewords"], stdout=subprocess.PIPE
+    )
     out, _ = process.communicate()
     assert not process.returncode
     assert out
