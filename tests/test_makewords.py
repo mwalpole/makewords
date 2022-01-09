@@ -12,22 +12,22 @@ LTRS_2 = "baz"
 
 
 def test_output_is_not_always_empty():
-    output = makewords.possibleWords(LTRS_1, WREF_1)
+    output = makewords.possible_words(LTRS_1, WREF_1)
     assert output == WREF_1
 
 
 def test_output_can_be_empty():
-    output = makewords.possibleWords(LTRS_2, WREF_1)
+    output = makewords.possible_words(LTRS_2, WREF_1)
     assert output == []
 
 
 def test_empty_string():
     with pytest.raises(AssertionError):
-        makewords.possibleWords("")
+        makewords.possible_words("")
 
 
 def test_nltk():
-    output = makewords.possibleWords("make")
+    output = makewords.possible_words("make")
     assert "make" in output
 
 
