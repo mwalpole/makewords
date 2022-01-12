@@ -2,6 +2,7 @@ import textwrap
 
 from nltk.corpus import words as nltklib
 
+import makewords.filters as filters
 from makewords.conf import NLTK_DIR
 
 import nltk
@@ -24,7 +25,13 @@ def _print_message(s):
     print(textwrap.fill(s, initial_indent=prefix))
 
 
-def possible_words(letters, words=None):
+def possible_words(letters, 
+        words=None, 
+        include=None, 
+        exclude=None, 
+        length=None, 
+        mask=None
+    ):
     """Identify the words that can be made from a list of letters."""
     assert len(letters) > 0, "Must provide at least one letter."
     res = []
@@ -33,12 +40,11 @@ def possible_words(letters, words=None):
         words = nltklib.words()
     else:
         _print_message("Using words provided by user.")
-    mustHave = letters[0]
+
+    words = filters.apply(words, length, mask, include, exclude)
     for word in words:
         flag = 1
         chars = char_count(word)
-        if mustHave not in word:
-            continue
         if len(word) < 4:
             continue
         for key in chars:
@@ -48,6 +54,5 @@ def possible_words(letters, words=None):
             #     if letters.count(key) != chars[key]:
             #         flag = 0
         if flag == 1:
-            print(word)
             res.append(word)
     return res
