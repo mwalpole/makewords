@@ -38,13 +38,13 @@ def get_clean_words(words=None):
 
 
 def possible_words(
-    letters, words=None, include=None, exclude=None, length=None, mask=None
+    letters, words=None, length=None, mask=None, include=None, exclude=None
 ):
     """Identify the words that can be made from a list of letters."""
     assert len(letters) > 0, "Must provide at least one letter."
     out = set()
     words = get_clean_words(words=words)
-    words = filters.apply(words, length, mask, include, exclude)
+    words = filters.apply(words, length=length, mask=mask, include=include, exclude=exclude)
     for word in words:
         flag = 1
         chars = char_count(word)

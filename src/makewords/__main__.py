@@ -20,7 +20,7 @@ def main(args=None):
     exclude = args.exclude
     length = args.length
     mask = args.mask
-    possible_words(letters, words, include, exclude, length, mask)
+    possible_words(letters, words=words, length=length, mask=mask, include=include, exclude=exclude)
 
 
 if __name__ == "__main__":  # pragma: no cov

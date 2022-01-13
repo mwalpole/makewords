@@ -33,11 +33,13 @@ def word_matches_mask(mask, word):
     return flag
 
 
-def word_contains_letter(letter, word):
+def word_contains_letter(include, word):
     flag = True
-    if letter is not None:
-        if letter not in word:
-            flag = False
+    if include is not None:
+        for letter in include:
+            if letter not in word:
+                flag = False
+                break
     return flag
 
 
@@ -55,12 +57,12 @@ def word_does_not_contain_nonascii_lowercase(word):
     return not set(word).difference(string.ascii_lowercase)
 
 
-def apply(words, length=None, mask=None, letter=None, exclude=None):
+def apply(words, length=None, mask=None, include=None, exclude=None):
     all_filters = (
         partial(word_length_at_least, MIN_LENGTH),
         partial(word_length_equals, length),
         partial(word_matches_mask, mask),
-        partial(word_contains_letter, letter),
+        partial(word_contains_letter, include),
         partial(word_contains_excluded_letter, exclude),
     )
     for f in all_filters:

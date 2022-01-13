@@ -52,7 +52,7 @@ def test_apply_iterative_filters():
     assert set(["foobar"]) == filters.apply(["foobar"], length=6)
     assert set(["foobar"]) == filters.apply(["foobar"], mask="f*****")
     assert set(["foobar"]) == filters.apply(["foobar"], mask="******")
-    assert set() == filters.apply(["foobar"], letter="z")
+    assert set() == filters.apply(["foobar"], include="z")
     assert set() == filters.apply(["baz"], exclude="z")
 
 

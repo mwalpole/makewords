@@ -11,6 +11,11 @@ WREF_1 = set(["foobar", "foob"])
 LTRS_2 = "baz"
 
 
+def test_favor():
+    output = makewords.possible_words('aefijkmopqruvwxz', include='aro', exclude='clstdbhygn', length=5)
+    assert 'favor' in output
+
+
 def test_output_is_not_always_empty():
     output = makewords.possible_words(LTRS_1, WREF_1)
     assert output == WREF_1
