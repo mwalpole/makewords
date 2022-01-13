@@ -2,6 +2,7 @@ import string
 from functools import partial
 
 from makewords.conf import MIN_LENGTH
+from makewords.util import letter_count
 
 
 def word_length_equals(length, word):
@@ -57,13 +58,26 @@ def word_does_not_contain_nonascii_lowercase(word):
     return not set(word).difference(string.ascii_lowercase)
 
 
-def apply(words, length=None, mask=None, include=None, exclude=None):
+def word_includes_allowed_letters_only(include, repeats, word):
+    flag = True
+    letters = letter_count(word)
+    for letter in letters:
+        if letter not in include:
+            flag = False
+        else:
+            if repeats and include.count(letter) != letters[letter]:
+                flag = False
+    return flag
+
+
+def apply(words, length=None, mask=None, include=None, exclude=None, repeats=None):
     all_filters = (
         partial(word_length_at_least, MIN_LENGTH),
         partial(word_length_equals, length),
         partial(word_matches_mask, mask),
         partial(word_contains_letter, include),
         partial(word_contains_excluded_letter, exclude),
+        partial(word_includes_allowed_letters_only, include, repeats)
     )
     for f in all_filters:
         words = filter(f, words)

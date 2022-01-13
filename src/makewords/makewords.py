@@ -1,3 +1,4 @@
+import string
 import textwrap
 
 from nltk.corpus import words as nltklib
@@ -10,13 +11,6 @@ import nltk
 # os.environ['NLTK_DATA'] = NLTK_DIR not working
 # in the meantime just append the path directly
 nltk.data.path.append(NLTK_DIR)
-
-
-def char_count(word):
-    nchars = {}
-    for i in word:
-        nchars[i] = nchars.get(i, 0) + 1
-    return nchars
 
 
 def _print_message(s):
@@ -38,23 +32,10 @@ def get_clean_words(words=None):
 
 
 def possible_words(
-    letters, words=None, length=None, mask=None, include=None, exclude=None
+    words=None, length=None, mask=None, include=None, only=False, exclude=None, repeats=True
 ):
     """Identify the words that can be made from a list of letters."""
-    assert len(letters) > 0, "Must provide at least one letter."
-    out = set()
     words = get_clean_words(words=words)
-    words = filters.apply(words, length=length, mask=mask, include=include, exclude=exclude)
-    for word in words:
-        flag = 1
-        chars = char_count(word)
-        for key in chars:
-            if key not in letters:
-                flag = 0
-            # else:
-            #     if letters.count(key) != chars[key]:
-            #         flag = 0
-        if flag == 1:
-            out.add(word)
-            print(word)
-    return out
+    allow = set(string.ascii_lowercase).difference(exclude) if only else include
+    words = filters.apply(words, length=length, mask=mask, include=allow, exclude=exclude, repeats=repeats)
+    return words
