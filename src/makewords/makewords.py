@@ -25,28 +25,29 @@ def _print_message(s):
     print(textwrap.fill(s, initial_indent=prefix))
 
 
-def possible_words(letters, 
-        words=None, 
-        include=None, 
-        exclude=None, 
-        length=None, 
-        mask=None
-    ):
-    """Identify the words that can be made from a list of letters."""
-    assert len(letters) > 0, "Must provide at least one letter."
-    res = []
+def get_clean_words(words=None):
     if words is None:
-        _print_message("Using en wordlist sourced from nltk.")
+        _print_message("Cleaning 'en' wordlist from nltk.")
         words = nltklib.words()
     else:
         _print_message("Using words provided by user.")
+    clean_words = set(
+        filter(filters.word_does_not_contain_nonascii_lowercase, set(words))
+    )
+    return clean_words
 
+
+def possible_words(
+    letters, words=None, include=None, exclude=None, length=None, mask=None
+):
+    """Identify the words that can be made from a list of letters."""
+    assert len(letters) > 0, "Must provide at least one letter."
+    out = set()
+    words = get_clean_words(words=words)
     words = filters.apply(words, length, mask, include, exclude)
     for word in words:
         flag = 1
         chars = char_count(word)
-        if len(word) < 4:
-            continue
         for key in chars:
             if key not in letters:
                 flag = 0
@@ -54,5 +55,6 @@ def possible_words(letters,
             #     if letters.count(key) != chars[key]:
             #         flag = 0
         if flag == 1:
-            res.append(word)
-    return res
+            out.add(word)
+            print(word)
+    return out

@@ -7,7 +7,7 @@ import makewords
 from makewords.__main__ import main
 
 LTRS_1 = "fobar"
-WREF_1 = ["foobar", "foob"]
+WREF_1 = set(["foobar", "foob"])
 LTRS_2 = "baz"
 
 
@@ -18,7 +18,7 @@ def test_output_is_not_always_empty():
 
 def test_output_can_be_empty():
     output = makewords.possible_words(LTRS_2, WREF_1)
-    assert output == []
+    assert output == set()
 
 
 def test_empty_string():
