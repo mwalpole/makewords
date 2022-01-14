@@ -70,14 +70,16 @@ def word_includes_allowed_letters_only(include, repeats, word):
     return flag
 
 
-def apply(words, include=None, only=False, exclude=None, length=None, mask=None, repeats=True):
+def apply(
+    words, include=None, only=False, exclude=None, length=None, mask=None, repeats=True
+):
     all_filters = (
         partial(word_length_at_least, MIN_LENGTH),
         partial(word_length_equals, length),
         partial(word_matches_mask, mask),
         partial(word_contains_letter, include, only),
         partial(word_contains_excluded_letter, exclude),
-        partial(word_includes_allowed_letters_only, include, repeats)
+        partial(word_includes_allowed_letters_only, include, repeats),
     )
     for f in all_filters:
         words = filter(f, words)

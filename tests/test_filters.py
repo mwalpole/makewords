@@ -34,7 +34,10 @@ def test_word_does_not_contain_nonascii_lowercase():
 
 
 def test_word_includes_allowed_letters_only():
-    assert filters.word_includes_allowed_letters_only(include='fobaro', repeats=False, word='foobar')
+    assert filters.word_includes_allowed_letters_only(
+        include="fobaro", repeats=False, word="foobar"
+    )
+
 
 def test_fail_word_length_equals():
     with pytest.raises(AssertionError):
@@ -54,11 +57,11 @@ def test_fail_word_length_at_least():
 
 def test_apply_iterative_filters():
     assert set() == filters.apply(["foo"])
-    assert set(["foobar"]) == filters.apply(words=["foobar"], include='fobar')
-    assert set() == filters.apply(["foobar"], include='fobar', length=5)
-    assert set(["foobar"]) == filters.apply(["foobar"], include='fobar', length=6)
-    assert set(["foobar"]) == filters.apply(["foobar"], include='fobar', mask="f*****")
-    assert set(["foobar"]) == filters.apply(["foobar"], include='fobar', mask="******")
+    assert set(["foobar"]) == filters.apply(words=["foobar"], include="fobar")
+    assert set() == filters.apply(["foobar"], include="fobar", length=5)
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", length=6)
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="f*****")
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="******")
     assert set() == filters.apply(["foobar"], include="z")
     assert set() == filters.apply(["baz"], exclude="z")
 
@@ -88,4 +91,6 @@ def test_fail_word_does_not_contain_nonascii_lowercase():
 
 def test_word_includes_allowed_letters_only():
     with pytest.raises(AssertionError):
-        assert filters.word_includes_allowed_letters_only(include='fobar', repeats=False, word='foobar')
+        assert filters.word_includes_allowed_letters_only(
+            include="fobar", repeats=False, word="foobar"
+        )

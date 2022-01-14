@@ -23,7 +23,13 @@ def main(args=None):
     mask = args.mask
     repeats = args.repeats
     possible_words(
-        words=words, length=length, mask=mask, include=include, only=only, exclude=exclude, repeats=repeats
+        words=words,
+        length=length,
+        mask=mask,
+        include=include,
+        only=only,
+        exclude=exclude,
+        repeats=repeats,
     )
 
 
