@@ -18,7 +18,11 @@ def test_word_matches_mask():
 
 
 def test_word_contains_letter():
-    assert filters.word_contains_letter("b", "foob")
+    assert filters.word_contains_letter("b", False, "foob")
+
+
+def test_word_contains_letter_include_none():
+    assert filters.word_contains_letter(None, False, "foob")
 
 
 def test_word_contains_excluded_letter():
@@ -27,6 +31,12 @@ def test_word_contains_excluded_letter():
 
 def test_word_does_not_contain_nonascii_lowercase():
     assert filters.word_does_not_contain_nonascii_lowercase("foob")
+
+
+def test_word_includes_allowed_letters_only():
+    assert filters.word_includes_allowed_letters_only(
+        include="fobaro", repeats=False, word="foobar"
+    )
 
 
 def test_fail_word_length_equals():
@@ -47,11 +57,11 @@ def test_fail_word_length_at_least():
 
 def test_apply_iterative_filters():
     assert set() == filters.apply(["foo"])
-    assert set(["foobar"]) == filters.apply(["foobar"])
-    assert set() == filters.apply(["foobar"], length=5)
-    assert set(["foobar"]) == filters.apply(["foobar"], length=6)
-    assert set(["foobar"]) == filters.apply(["foobar"], mask="f*****")
-    assert set(["foobar"]) == filters.apply(["foobar"], mask="******")
+    assert set(["foobar"]) == filters.apply(words=["foobar"], include="fobar")
+    assert set() == filters.apply(["foobar"], include="fobar", length=5)
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", length=6)
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="f*****")
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="******")
     assert set() == filters.apply(["foobar"], include="z")
     assert set() == filters.apply(["baz"], exclude="z")
 
@@ -63,7 +73,7 @@ def test_fail_word_matches_mask():
 
 def test_fail_word_contains_letter():
     with pytest.raises(AssertionError):
-        assert filters.word_contains_letter("x", "foob")
+        assert filters.word_contains_letter(include="x", only=True, word="foob")
 
 
 def test_fail_word_contains_excluded_letter():
@@ -77,3 +87,10 @@ def test_fail_word_does_not_contain_nonascii_lowercase():
 
     with pytest.raises(AssertionError):
         assert filters.word_does_not_contain_nonascii_lowercase("Foob")
+
+
+def test_word_includes_allowed_letters_only():
+    with pytest.raises(AssertionError):
+        assert filters.word_includes_allowed_letters_only(
+            include="fobar", repeats=False, word="foobar"
+        )
