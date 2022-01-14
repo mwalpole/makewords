@@ -32,10 +32,21 @@ def get_clean_words(words=None):
 
 
 def possible_words(
-    words=None, length=None, mask=None, include=None, only=False, exclude=None, repeats=True
+    words=None, include=None, only=False, exclude=None, length=None, mask=None, repeats=True
 ):
-    """Identify the words that can be made from a list of letters."""
+    """Identify the words that can be made from a list of letters.
+
+    words   [str]   set of words, superset of what will be returned
+    include str     letters to include in our search
+    only    bool    include only these letters or allow others
+    exclude str     letters to exclude from our words
+    length  int     length of search words
+    mask    str     use * wildcard, e.g. "f***ar" will match "foobar"
+    repeats bool    allow included letters to be repeated or match exactly
+    """
     words = get_clean_words(words=words)
-    allow = set(string.ascii_lowercase).difference(exclude) if only else include
-    words = filters.apply(words, length=length, mask=mask, include=allow, exclude=exclude, repeats=repeats)
+    include = include if include is not None else string.ascii_lowercase
+    exclude = exclude if exclude is not None else ''
+    allow = set(include).difference(exclude) if only else include
+    words = filters.apply(words, include=allow, exclude=exclude, length=length, mask=mask, repeats=repeats)
     return words

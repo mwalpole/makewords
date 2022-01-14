@@ -1,5 +1,5 @@
-def letter_count(word):
-    nchars = {}
+def count_letters(word):
+    letter_count = {}
     for i in word:
-        nchars[i] = nchars.get(i, 0) + 1
-    return nchars
+        letter_count[i] = letter_count.get(i, 0) + 1
+    return letter_count

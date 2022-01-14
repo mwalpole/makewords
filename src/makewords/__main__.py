@@ -13,6 +13,7 @@ def main(args=None):
     parser.add_argument("--exclude", dest="exclude", type=str, nargs="?", default=None)
     parser.add_argument("--len", dest="length", type=int, nargs="?", default=None)
     parser.add_argument("--mask", dest="mask", type=str, nargs="?", default=None)
+    parser.add_argument("--repeats", dest="repeats", type=bool, nargs="?", default=True)
     args = parser.parse_args()
     words = args.words.split(",") if args.words is not None else None
     include = args.include
