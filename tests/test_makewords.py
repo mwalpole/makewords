@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-import pytest
+import pytest 
 
 import makewords
 from makewords.__main__ import main
@@ -45,5 +45,10 @@ def test_main():
     assert out
 
 
-def test_main_args():
-    pass
+def test_main_arg_fail():
+    with pytest.raises(AssertionError):
+        process = subprocess.Popen(
+            [sys.executable, "-m", "makewords", "unrecognized", "arguments"], stdout=subprocess.PIPE
+        )
+        out, _ = process.communicate()
+        assert not process.returncode
