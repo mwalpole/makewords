@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-import pytest
+import pytest 
 
 import makewords
 from makewords.__main__ import main
@@ -12,27 +12,27 @@ LTRS_2 = "baz"
 
 
 def test_favor():
-    output = makewords.possible_words('aefijkmopqruvwxz', include='aro', exclude='clstdbhygn', length=5)
-    assert 'favor' in output
+    output = makewords.possible_words(include="vfaro", exclude="clstdbhygn", length=5)
+    assert "favor" in output
 
 
 def test_output_is_not_always_empty():
-    output = makewords.possible_words(LTRS_1, WREF_1)
+    output = makewords.possible_words(words=WREF_1)
     assert output == WREF_1
 
 
 def test_output_can_be_empty():
-    output = makewords.possible_words(LTRS_2, WREF_1)
+    output = makewords.possible_words(words=WREF_1, include=LTRS_2)
     assert output == set()
 
 
 def test_empty_string():
-    with pytest.raises(AssertionError):
-        makewords.possible_words("")
+    output = makewords.possible_words(include="")
+    assert isinstance(output, set)
 
 
 def test_nltk():
-    output = makewords.possible_words("make")
+    output = makewords.possible_words(include="make")
     assert "make" in output
 
 
@@ -45,5 +45,10 @@ def test_main():
     assert out
 
 
-def test_main_args():
-    pass
+def test_main_arg_fail():
+    with pytest.raises(AssertionError):
+        process = subprocess.Popen(
+            [sys.executable, "-m", "makewords", "unrecognized", "arguments"], stdout=subprocess.PIPE
+        )
+        out, _ = process.communicate()
+        assert not process.returncode

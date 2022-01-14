@@ -1,36 +1,29 @@
-import textwrap
+import string
 
 from nltk.corpus import words as nltklib
 
 import makewords.filters as filters
-from makewords.conf import NLTK_DIR
+import makewords.conf as conf
+import makewords.util as util
 
 import nltk
 
 # os.environ['NLTK_DATA'] = NLTK_DIR not working
 # in the meantime just append the path directly
-nltk.data.path.append(NLTK_DIR)
-
-
-def char_count(word):
-    nchars = {}
-    for i in word:
-        nchars[i] = nchars.get(i, 0) + 1
-    return nchars
-
-
-def _print_message(s):
-    """Handle terminal output consistently with nltk."""
-    prefix = "[makewords] "
-    print(textwrap.fill(s, initial_indent=prefix))
+nltk.data.path.append(conf.NLTK_DIR)
 
 
 def get_clean_words(words=None):
+    """Retrieve and clean words from NLTK or custom list.
+    
+    Cleaning here amounts to dropping words with captials 
+    or non-ascii characters.
+    """
     if words is None:
-        _print_message("Cleaning 'en' wordlist from nltk.")
+        util.print_message("Cleaning 'en' wordlist from nltk.")
         words = nltklib.words()
     else:
-        _print_message("Using words provided by user.")
+        util.print_message("Using words provided by user.")
     clean_words = set(
         filter(filters.word_does_not_contain_nonascii_lowercase, set(words))
     )
@@ -38,23 +31,38 @@ def get_clean_words(words=None):
 
 
 def possible_words(
-    letters, words=None, length=None, mask=None, include=None, exclude=None
+    words=None,
+    include=None,
+    only=False,
+    exclude=None,
+    length=None,
+    mask=None,
+    repeats=True,
 ):
-    """Identify the words that can be made from a list of letters."""
-    assert len(letters) > 0, "Must provide at least one letter."
-    out = set()
+    """Identify the words that can be made from a list of letters.
+
+    Parameters
+    ----------
+    words   : [str], optional
+        Set of words, superset of what will be returned.
+    include : str, optional
+        Letters to include in our search.
+    only    : bool, optional
+        Include only these letters or allow others.
+    exclude : str, optional
+        Letters to exclude from our words.
+    length  : int, optional
+        Length of search words.
+    mask    : str, optional
+        Use * wildcard, e.g. "f***ar" will match "foobar".
+    repeats : bool, optional
+        Allow included letters to be repeated or match exactly.
+    """
     words = get_clean_words(words=words)
-    words = filters.apply(words, length=length, mask=mask, include=include, exclude=exclude)
-    for word in words:
-        flag = 1
-        chars = char_count(word)
-        for key in chars:
-            if key not in letters:
-                flag = 0
-            # else:
-            #     if letters.count(key) != chars[key]:
-            #         flag = 0
-        if flag == 1:
-            out.add(word)
-            print(word)
-    return out
+    include = include if include is not None else string.ascii_lowercase
+    exclude = exclude if exclude is not None else ""
+    allow = set(include).difference(exclude) if only else include
+    words = filters.apply(
+        words, include=allow, exclude=exclude, length=length, mask=mask, repeats=repeats
+    )
+    return words
