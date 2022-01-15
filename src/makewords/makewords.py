@@ -66,3 +66,11 @@ def possible_words(
         words, include=allow, exclude=exclude, length=length, mask=mask, repeats=repeats
     )
     return words
+
+
+def wordle():
+    pass
+
+
+def spelling_bee():
+    pass
