@@ -54,7 +54,7 @@ def word_contains_excluded_letter(exclude, word):
     return flag
 
 
-def word_does_not_contain_nonascii_lowercase(word):
+def word_is_ascii_lowercase(word):
     return not set(word).difference(string.ascii_lowercase)
 
 

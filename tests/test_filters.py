@@ -29,8 +29,8 @@ def test_word_contains_excluded_letter():
     assert filters.word_contains_excluded_letter("z", "foobar")
 
 
-def test_word_does_not_contain_nonascii_lowercase():
-    assert filters.word_does_not_contain_nonascii_lowercase("foob")
+def test_word_is_ascii_lowercase():
+    assert filters.word_is_ascii_lowercase("foob")
 
 
 def test_word_includes_allowed_letters_only():
@@ -81,12 +81,12 @@ def test_fail_word_contains_excluded_letter():
         assert filters.word_contains_excluded_letter("z", "baz")
 
 
-def test_fail_word_does_not_contain_nonascii_lowercase():
+def test_fail_word_is_ascii_lowercase():
     with pytest.raises(AssertionError):
-        assert filters.word_does_not_contain_nonascii_lowercase("foo-bar")
+        assert filters.word_is_ascii_lowercase("foo-bar")
 
     with pytest.raises(AssertionError):
-        assert filters.word_does_not_contain_nonascii_lowercase("Foob")
+        assert filters.word_is_ascii_lowercase("Foob")
 
 
 def test_word_includes_allowed_letters_only():

@@ -25,7 +25,7 @@ def get_clean_words(words=None):
     else:
         util.print_message("Using words provided by user.")
     clean_words = set(
-        filter(filters.word_does_not_contain_nonascii_lowercase, set(words))
+        filter(filters.word_is_ascii_lowercase, set(words))
     )
     return clean_words
 
