@@ -12,7 +12,7 @@ LTRS_2 = "baz"
 
 
 def test_favor():
-    output = makewords.possible_words(include="vfaro", exclude="clstdbhygn", length=5)
+    output = makewords.possible_words(words=["favor", "fosta"], include="vfaro", exclude="clstdbhygn", length=5)
     assert "favor" in output
 
 
@@ -26,19 +26,28 @@ def test_output_can_be_empty():
     assert output == set()
 
 
-def test_empty_string():
-    output = makewords.possible_words(include="")
+def test_include_empty_string():
+    output = makewords.possible_words(words=WREF_1, include="")
     assert isinstance(output, set)
 
 
 def test_nltk():
-    output = makewords.possible_words(include="make")
+    output = makewords.possible_words(include="make", length=4)
     assert "make" in output
 
 
 def test_main():
     process = subprocess.Popen(
-        [sys.executable, "-m", "makewords"], stdout=subprocess.PIPE
+        [sys.executable, "-m", "makewords", "--words=talo"], stdout=subprocess.PIPE
+    )
+    out, _ = process.communicate()
+    assert not process.returncode
+    assert out
+
+
+def test_main_with_print():
+    process = subprocess.Popen(
+        [sys.executable, "-m", "makewords", "--words=talo", "--print=True"], stdout=subprocess.PIPE
     )
     out, _ = process.communicate()
     assert not process.returncode

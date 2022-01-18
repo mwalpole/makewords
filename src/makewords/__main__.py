@@ -11,9 +11,10 @@ def main(args=None):
     parser.add_argument("--include", dest="include", type=str, nargs="?", default=None)
     parser.add_argument("--only", dest="only", type=bool, nargs="?", default=False)
     parser.add_argument("--exclude", dest="exclude", type=str, nargs="?", default=None)
-    parser.add_argument("--len", dest="length", type=int, nargs="?", default=None)
+    parser.add_argument("--length", dest="length", type=int, nargs="?", default=None)
     parser.add_argument("--mask", dest="mask", type=str, nargs="?", default=None)
     parser.add_argument("--repeats", dest="repeats", type=bool, nargs="?", default=True)
+    parser.add_argument("--print", dest="print", type=bool, nargs="?", default=False)
     args = parser.parse_args()
     words = args.words.split(",") if args.words is not None else None
     include = args.include
@@ -22,7 +23,7 @@ def main(args=None):
     length = args.length
     mask = args.mask
     repeats = args.repeats
-    possible_words(
+    words = possible_words(
         words=words,
         length=length,
         mask=mask,
@@ -31,6 +32,8 @@ def main(args=None):
         exclude=exclude,
         repeats=repeats,
     )
+    if args.print:
+        print(words)
 
 
 if __name__ == "__main__":  # pragma: no cov
