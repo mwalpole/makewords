@@ -2,21 +2,24 @@
 # Choose a five letter word and build words corpus
 # Apply rules, identify acceptable guess and provide feedback
 # Score session
+import argparse
 import random
 import sys
 
 import makewords.makewords as make
 import makewords.util as util
 
-N=5
+N = 5
 
 
-class Wordle():
-    def __init__(self, length=None):
-        if length is None:
-            length = N
-        self.all_words = make.possible_words(length=length)
-        self.target = random.choice(list(self.all_words)).upper()
+class Wordle:
+    def __init__(self, length=None, word=None):
+        self.length = length if length is not None else N
+        self.all_words = make.possible_words(length=self.length)
+        if word is None:
+            self.target = random.choice(list(self.all_words)).upper()
+        else:
+            self.target = word.upper()
         self.target_count = util.count_letters(self.target)
 
     def play(self):
@@ -24,9 +27,8 @@ class Wordle():
         while turn < 7:
             guess = self.guess(turn)
             result = self.assess(guess)
-            self.respond(result, turn)
+            print("{0}> {1} -> {2}".format(turn, guess, result))
             turn += 1
-        print("Done. The word is {}.".format(self.target))
 
     def guess(self, turn):
         guess = input("Guess {turn}: ".format(turn=turn))
@@ -44,42 +46,40 @@ class Wordle():
 
     def assess(self, guess):
         """Provide hints based on assessment of latest guess.
-        
-        Print a capital letter for a letter in the correct place.
-        Print a lower case letter for each appearance of that letter in the word.
+
+        Rules
+        -----
+        #1 Print a capital letter for a letter in the correct place.
+        #2 Print a lower case letter for each appearance of that letter in the word.
         """
-        result = {
-            "guess": guess,
-            "result": "",
-            "exclude": ""
-        }
+        output = ["."] * self.length
         guess = guess.upper()
-        letter_count = {}
-        for i,letter in enumerate(guess):
-            letter_count[letter] = letter_count.get(i, 0) + 1
-            if letter == self.target[i]:
-                result['result'] += letter
-            elif letter in self.target and letter_count.get(letter) <= self.target_count[letter]:
-                result['result'] += letter.lower()
-            else:
-                result['result'] += "."
-                result['exclude'] += letter.lower()
-        return result
-
-    def respond(self, result, turn):
-        print(
-            "{turn}> {guess} -> {result}".format(
-                turn=turn,
-                guess=result["guess"].upper(),
-                result=result["result"]
-            )
-        )
+        # Rule #1 - Identify positions for which we have a full match
+        answer = list(self.target)
+        for i in reversed(range(self.length)):
+            if guess[i] == answer[i]:
+                output[i] = answer.pop(i)
+        # Rule #2 - Identify positions that represent a letter match in the wrong position
+        for i in range(self.length):
+            if guess[i] in answer and not output[i].isalpha():
+                output[i] = answer.pop(answer.index(guess[i])).lower()
+        return "".join(output)
 
 
-def main():
-    wordle = Wordle()
-    wordle.play()
+def main(args=None):
+    args = sys.argv[1:] if args is None else args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--word", dest="word", type=str, nargs="?", default=None)
+    args = parser.parse_args()
+    word = args.word
+    try:
+        wordle = Wordle(word=word)
+        wordle.play()
+    except KeyboardInterrupt:
+        print("\nUser exit.")
+    finally:
+        print("Done. Answer: {}".format(wordle.target))
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main())  # pragma: no cov
