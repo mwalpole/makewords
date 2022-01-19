@@ -14,7 +14,7 @@ def test_word_length_at_least():
 
 
 def test_word_matches_mask():
-    assert filters.word_matches_mask("fo*b", "foob")
+    assert filters.word_matches_mask("fo.b", "foob")
 
 
 def test_word_contains_letter():
@@ -60,15 +60,15 @@ def test_apply_iterative_filters():
     assert set(["foobar"]) == filters.apply(words=["foobar"], include="fobar")
     assert set() == filters.apply(["foobar"], include="fobar", length=5)
     assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", length=6)
-    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="f*****")
-    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="******")
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="f.....")
+    assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", mask="......")
     assert set() == filters.apply(["foobar"], include="z")
     assert set() == filters.apply(["baz"], exclude="z")
 
 
 def test_fail_word_matches_mask():
     with pytest.raises(AssertionError):
-        assert filters.word_matches_mask("fo*b", "frob")
+        assert filters.word_matches_mask("fo.b", "frob")
 
 
 def test_fail_word_contains_letter():

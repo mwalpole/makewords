@@ -25,7 +25,7 @@ def word_matches_mask(mask, word):
     flag = True
     if mask is not None:
         for i, j in enumerate(mask):
-            if j == "*":
+            if j == ".":
                 continue
             else:
                 if word[i] != j:

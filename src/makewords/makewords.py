@@ -54,7 +54,7 @@ def possible_words(
     length  : int, optional
         Length of search words.
     mask    : str, optional
-        Use * wildcard, e.g. "f***ar" will match "foobar".
+        Use . wildcard, e.g. "f...ar" will match "foobar".
     repeats : bool, optional
         Allow included letters to be repeated or match exactly.
     """
