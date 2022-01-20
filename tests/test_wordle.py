@@ -1,5 +1,7 @@
 import pytest
+from unittest.mock import create_autospec, patch
 
+import makewords
 import makewords.game.wordle as wordle
 
 
@@ -25,3 +27,12 @@ def test_game_rule_two_no_duplicates(game):
 def test_game_win(game):
     output = game.assess("benne")
     assert output == "BENNE"
+
+
+def test_random_choice():
+    config = {"possible_words.return_value": set(["foobar"])}
+    patcher = patch("makewords.game.wordle.make", **config)
+    mock_possible_words = patcher.start()
+    output = wordle.Wordle()
+    mock_possible_words.possible_words.assert_called_once_with(length=wordle.N)
+    assert output.target == "FOOBAR"
