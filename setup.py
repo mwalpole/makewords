@@ -15,7 +15,7 @@ README = (ROOT_DIR / "README.md").read_text()
 
 setup(
     name="makewords",
-    version="0.1.1",
+    version="0.1.2",
     author="Mark Walpole",
     author_email="mark.walpole.dev@gmail.com",
     url="https://github.com/mwalpole/makewords",
