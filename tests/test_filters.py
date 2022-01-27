@@ -33,9 +33,9 @@ def test_word_is_ascii_lowercase():
     assert filters.word_is_ascii_lowercase("foob")
 
 
-def test_word_includes_allowed_letters_only():
-    assert filters.word_includes_allowed_letters_only(
-        include="fobaro", repeats=False, word="foobar"
+def test_word_matches_letter_count_from_include():
+    assert filters.word_matches_letter_count_from_include(
+        include="fobaro", match_count=True, word="foobar"
     )
 
 
@@ -89,8 +89,8 @@ def test_fail_word_is_ascii_lowercase():
         assert filters.word_is_ascii_lowercase("Foob")
 
 
-def test_word_includes_allowed_letters_only():
+def test_fail_word_matches_specified_count_of_lettesr_to_include():
     with pytest.raises(AssertionError):
-        assert filters.word_includes_allowed_letters_only(
-            include="fobar", repeats=False, word="foobar"
+        assert filters.word_matches_letter_count_from_include(
+            include="fobar", match_count=True, word="foobar"
         )

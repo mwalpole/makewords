@@ -1,4 +1,3 @@
-from makewords.filters import word_includes_allowed_letters_only
 from makewords.util import count_letters
 
 

@@ -37,10 +37,13 @@ def word_matches_mask(mask, word):
 def word_contains_letter(include, only, word):
     flag = True
     if include is not None:
-        for letter in include:
-            if only and letter not in word:
-                flag = False
-                break
+        if only and not set(word).issubset(include):
+            flag = False
+        else:
+            for letter in include:
+                if letter not in word:
+                    flag = False
+                    break
     return flag
 
 
@@ -58,20 +61,24 @@ def word_is_ascii_lowercase(word):
     return not set(word).difference(string.ascii_lowercase)
 
 
-def word_includes_allowed_letters_only(include, repeats, word):
+def word_matches_letter_count_from_include(include, match_count, word):
     flag = True
-    letter_count = count_letters(word)
-    for letter in letter_count:
-        if letter not in include:
-            flag = False
-        else:
-            if not repeats and include.count(letter) != letter_count[letter]:
+    if match_count:
+        letter_count = count_letters(word)
+        for letter in include:
+            if include.count(letter) != letter_count[letter]:
                 flag = False
     return flag
 
 
 def apply(
-    words, include=None, only=False, exclude=None, length=None, mask=None, repeats=True
+    words,
+    include=None,
+    only=False,
+    match_count=False,
+    exclude=None,
+    length=None,
+    mask=None,
 ):
     all_filters = (
         partial(word_length_at_least, MIN_LENGTH),
@@ -79,7 +86,7 @@ def apply(
         partial(word_matches_mask, mask),
         partial(word_contains_letter, include, only),
         partial(word_contains_excluded_letter, exclude),
-        partial(word_includes_allowed_letters_only, include, repeats),
+        partial(word_matches_letter_count_from_include, include, match_count),
     )
     for f in all_filters:
         words = filter(f, words)

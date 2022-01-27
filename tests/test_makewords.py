@@ -12,7 +12,9 @@ LTRS_2 = "baz"
 
 
 def test_favor():
-    output = makewords.possible_words(words=["favor", "fosta"], include="vfaro", exclude="clstdbhygn", length=5)
+    output = makewords.possible_words(
+        words=["favor", "fosta"], include="vfaro", exclude="clstdbhygn", length=5
+    )
     assert "favor" in output
 
 
