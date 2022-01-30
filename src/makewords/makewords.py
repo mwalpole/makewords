@@ -1,12 +1,9 @@
-import string
-
+import nltk
 from nltk.corpus import words as nltklib
 
 import makewords.filters as filters
 import makewords.conf as conf
 import makewords.util as util
-
-import nltk
 
 # os.environ['NLTK_DATA'] = NLTK_DIR not working
 # in the meantime just append the path directly

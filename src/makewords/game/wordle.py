@@ -26,9 +26,12 @@ class Wordle:
         turn = 1
         while turn < 7:
             guess = self.guess(turn)
-            result = self.assess(guess)
+            result = self.check(guess)
             print("{0}> {1} -> {2}".format(turn, guess, result))
-            turn += 1
+            if result == self.target:
+                break
+            else:
+                turn += 1
 
     def guess(self, turn):
         guess = input("Guess {turn}: ".format(turn=turn))
@@ -44,8 +47,8 @@ class Wordle:
             guess = self.guess(turn)
         return guess
 
-    def assess(self, guess):
-        """Provide hints based on assessment of latest guess.
+    def check(self, guess):
+        """Provide hints based on latest guess.
 
         Rules
         -----
@@ -54,12 +57,12 @@ class Wordle:
         """
         output = ["."] * self.length
         guess = guess.upper()
-        # Rule #1 - Identify positions for which we have a full match
+        # Rule #1
         answer = list(self.target)
         for i in reversed(range(self.length)):
             if guess[i] == answer[i]:
                 output[i] = answer.pop(i)
-        # Rule #2 - Identify positions that represent a letter match in the wrong position
+        # Rule #2
         for i in range(self.length):
             if guess[i] in answer and not output[i].isalpha():
                 output[i] = answer.pop(answer.index(guess[i])).lower()

@@ -1,7 +1,6 @@
 import pytest
-from unittest.mock import create_autospec, patch
+from unittest.mock import patch
 
-import makewords
 import makewords.game.wordle as wordle
 
 
