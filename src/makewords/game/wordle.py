@@ -7,48 +7,49 @@ import random
 import sys
 
 import makewords.makewords as make
-import makewords.util as util
 
-N = 5
+DEFAULT_LETTER_COUNT = 5
+MAX_ATTEMPTS = 7
 
 
 class Wordle:
     def __init__(self, length=None, word=None):
-        self.length = length if length is not None else N
+        self.length = length if length is not None else DEFAULT_LETTER_COUNT
         self.all_words = make.possible_words(length=self.length)
         if word is None:
             self.target = random.choice(list(self.all_words)).upper()
         else:
             self.target = word.upper()
-        self.target_count = util.count_letters(self.target)
+        self.max_attempts = MAX_ATTEMPTS
+        self.attempts = {}
 
     def play(self):
-        turn = 1
-        while turn < 7:
-            guess = self.guess(turn)
+        attempt = 1
+        while attempt < self.max_attempts:
+            guess = self.guess(attempt)
             result = self.check(guess)
-            print("{0}> {1} -> {2}".format(turn, guess, result))
+            print("{0}> {1} -> {2}".format(attempt, guess, result))
             if result == self.target:
                 break
             else:
-                turn += 1
+                attempt += 1
 
-    def guess(self, turn):
-        guess = input("Guess {turn}: ".format(turn=turn))
-        guess = self.clean(guess.lower(), turn)
+    def guess(self, attempt):
+        guess = input("Guess {attempt}: ".format(attempt=attempt))
+        guess = self.clean(guess.lower(), attempt)
         return guess
 
-    def clean(self, guess, turn):
+    def clean(self, guess, attempt):
         ok = False
         if guess in self.all_words:
             ok = True
         if not ok:
             print("{} is not in wordlist. Try again.".format(guess))
-            guess = self.guess(turn)
+            guess = self.guess(attempt)
         return guess
 
     def check(self, guess):
-        """Provide hints based on latest guess.
+        """Provide hints based on the latest guess.
 
         Rules
         -----
@@ -84,5 +85,5 @@ def main(args=None):
         print("Done. Answer: {}".format(wordle.target))
 
 
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cov
+if __name__ == "__main__":  # pragma: no cover
+    sys.exit(main())  # pragma: no cover

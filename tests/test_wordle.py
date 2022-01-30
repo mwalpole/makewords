@@ -14,17 +14,17 @@ def test_game_target_is_upper(game):
 
 
 def test_game_rule_one_only_caps(game):
-    output = game.assess("melee")
+    output = game.check("melee")
     assert output == ".E..E"
 
 
 def test_game_rule_two_no_duplicates(game):
-    output = game.assess("meees")
+    output = game.check("meees")
     assert output == ".Ee.."
 
 
 def test_game_win(game):
-    output = game.assess("benne")
+    output = game.check("benne")
     assert output == "BENNE"
 
 
@@ -33,5 +33,5 @@ def test_random_choice():
     patcher = patch("makewords.game.wordle.make", **config)
     mock_possible_words = patcher.start()
     output = wordle.Wordle()
-    mock_possible_words.possible_words.assert_called_once_with(length=wordle.N)
+    mock_possible_words.possible_words.assert_called_once_with(length=wordle.DEFAULT_LETTER_COUNT)
     assert output.target == "FOOBAR"

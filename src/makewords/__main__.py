@@ -38,5 +38,5 @@ def main(args=None):
         print(words)
 
 
-if __name__ == "__main__":  # pragma: no cov
-    sys.exit(main())  # pragma: no cov
+if __name__ == "__main__":
+    sys.exit(main())

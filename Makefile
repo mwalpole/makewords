@@ -6,6 +6,9 @@ init:
 test:
 	tox -e pyt38
 
+coverage:
+	pytest --cov-report term-missing --cov makewords tests/
+
 lint:
 	tox -e linter
 
