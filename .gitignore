@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 
 # Packaging
+build/
+dist/
 *.egg-info/
 
 # Editor
