@@ -11,6 +11,7 @@ import makewords.makewords as make
 DEFAULT_LETTER_COUNT = 5
 MAX_ATTEMPTS = 7
 
+# Add session to pick up where we left off or start from particular state
 
 class Wordle:
     def __init__(self, length=None, word=None):
@@ -28,6 +29,7 @@ class Wordle:
         while attempt < self.max_attempts:
             guess = self.guess(attempt)
             result = self.check(guess)
+            self.attempts[attempt] = result
             print("{0}> {1} -> {2}".format(attempt, guess, result))
             if result == self.target:
                 break
