@@ -53,6 +53,10 @@ def possible_words(
     mask    : str, optional
         Use . wildcard, e.g. "f...ar" will match "foobar".
     """
+    if include is not None and exclude is not None:
+        shared = set(include).intersection(exclude)
+        assert not shared, "Cannot include and exclude the same letter(s): {}".format(", ".join(shared)) 
+
     words = get_clean_words(words=words)
     words = filters.apply(
         words,

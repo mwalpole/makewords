@@ -38,6 +38,10 @@ def test_nltk():
     assert "make" in output
 
 
+def test_include_and_exclude_same_letter_fails():
+    with pytest.raises(AssertionError):
+        makewords.possible_words(include="ab", exclude="bc")
+
 def test_main():
     process = subprocess.Popen(
         [sys.executable, "-m", "makewords", "--words=talo"], stdout=subprocess.PIPE
