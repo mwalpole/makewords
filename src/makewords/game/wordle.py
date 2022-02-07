@@ -20,21 +20,26 @@ class Wordle:
         if word is None:
             self.target = random.choice(list(self.all_words)).upper()
         else:
+            additional = make.get_clean_words(words=[word])
+            self.all_words = self.all_words.union(additional)
             self.target = word.upper()
         self.max_attempts = MAX_ATTEMPTS
         self.attempts = {}
 
     def play(self):
         attempt = 1
+        outcome = "Fail"
         while attempt < self.max_attempts:
             guess = self.guess(attempt)
             result = self.check(guess)
             self.attempts[attempt] = result
             print("{0}> {1} -> {2}".format(attempt, guess, result))
             if result == self.target:
+                outcome = "Success"
                 break
             else:
                 attempt += 1
+        return outcome
 
     def guess(self, attempt):
         guess = input("Guess {attempt}: ".format(attempt=attempt))
@@ -80,11 +85,11 @@ def main(args=None):
     word = args.word
     try:
         wordle = Wordle(word=word)
-        wordle.play()
+        outcome = wordle.play()
     except KeyboardInterrupt:
-        print("\nUser exit.")
+        outcome = "\nGive up"
     finally:
-        print("Done. Answer: {}".format(wordle.target))
+        print("{}. Answer: {}".format(outcome, wordle.target))
 
 
 if __name__ == "__main__":  # pragma: no cover
