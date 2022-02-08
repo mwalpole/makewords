@@ -1,3 +1,4 @@
+import string
 import subprocess
 import sys
 
@@ -6,31 +7,42 @@ import pytest
 import makewords
 from makewords.__main__ import main
 
-LTRS_1 = "fobar"
-WREF_1 = set(["foobar", "foob"])
-LTRS_2 = "baz"
-
-
-def test_favor():
-    output = makewords.possible_words(
-        words=["favor", "fosta"], include="vfaro", exclude="clstdbhygn", length=5
-    )
-    assert "favor" in output
+WORD_1 = "foobar"
+WORD_2 = "foob"
+WORDS = set([WORD_1, WORD_2])
 
 
 def test_output_is_not_always_empty():
-    output = makewords.possible_words(words=WREF_1)
-    assert output == WREF_1
+    output = makewords.possible_words(words=WORDS)
+    assert output == WORDS
 
 
-def test_output_can_be_empty():
-    output = makewords.possible_words(words=WREF_1, include=LTRS_2)
+def test_no_words_output():
+    others = set(string.ascii_lowercase).difference("".join(WORDS))
+    output = makewords.possible_words(words=WORDS, include=others)
     assert output == set()
 
 
 def test_include_empty_string():
-    output = makewords.possible_words(words=WREF_1, include="")
+    output = makewords.possible_words(words=WORDS, include="")
     assert isinstance(output, set)
+
+
+def test_exclude_two_letters():
+    output = makewords.possible_words(
+        words=["foobar", "foobaz", "foobay"], include="faro", exclude="zy", length=6
+    )
+    assert set(["foobar"]) == output
+
+
+def test_include_and_exclude_same_letter_fails():
+    with pytest.raises(AssertionError):
+        makewords.possible_words(include="ab", exclude="bc")
+
+
+def test_length_matches_mask():
+    output = makewords.possible_words(words=WORDS, mask="." * len(WORD_1))
+    assert output == set([WORD_1])
 
 
 def test_nltk():
@@ -38,22 +50,9 @@ def test_nltk():
     assert "make" in output
 
 
-def test_include_and_exclude_same_letter_fails():
-    with pytest.raises(AssertionError):
-        makewords.possible_words(include="ab", exclude="bc")
-
 def test_main():
     process = subprocess.Popen(
         [sys.executable, "-m", "makewords", "--words=talo"], stdout=subprocess.PIPE
-    )
-    out, _ = process.communicate()
-    assert not process.returncode
-    assert out
-
-
-def test_main_with_print():
-    process = subprocess.Popen(
-        [sys.executable, "-m", "makewords", "--words=talo", "--print=True"], stdout=subprocess.PIPE
     )
     out, _ = process.communicate()
     assert not process.returncode

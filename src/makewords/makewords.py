@@ -34,28 +34,31 @@ def possible_words(
     length=None,
     mask=None,
 ):
-    """Identify the words that can be made from a list of letters.
+    """Identify words that can be made from a list of letters.
 
     Parameters
     ----------
     words   : [str], optional
-        Set of words, superset of what will be returned.
+        list of words as baseline
     include : str, optional
-        Letters to include in our search.
+        use these letters
     only    : bool, optional, default is False
-        Include only these letters or allow others.
+        only use included letters
     match_count : bool, optional, default is False
-        Match the count of each letter from include exactly.
+        use the same count of included letters
     exclude : str, optional
-        Letters to exclude from our words.
+        do not use these letters
     length  : int, optional
-        Length of search words.
+        make words of this many letters
     mask    : str, optional
-        Use . wildcard, e.g. "f...ar" will match "foobar".
+        words should look like this, wildcard is "."
     """
     if include is not None and exclude is not None:
         shared = set(include).intersection(exclude)
         assert not shared, "Cannot include and exclude the same letter(s): {}".format(", ".join(shared)) 
+
+    if mask is not None and length is None:
+        length = len(mask)
 
     words = get_clean_words(words=words)
     words = filters.apply(
