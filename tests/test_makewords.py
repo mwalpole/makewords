@@ -30,7 +30,7 @@ def test_include_empty_string():
 
 def test_exclude_two_letters():
     output = makewords.possible_words(
-        words=["foobar", "foobaz", "foobay"], include="faro", exclude="zy", length=6
+        words=["foobar", "foobaz", "foobay", "bubbub"], include="faro", exclude="zy", length=6
     )
     assert set(["foobar"]) == output
 

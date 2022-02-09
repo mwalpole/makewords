@@ -9,37 +9,45 @@ import sys
 import makewords.makewords as make
 
 DEFAULT_LETTER_COUNT = 5
-MAX_ATTEMPTS = 7
+MAX_ATTEMPTS = 6
+# Result states
+FAIL = "Fail"
+QUIT = "Quit"
+SUCCESS = "Success"
 
 # Add session to pick up where we left off or start from particular state
 
+
 class Wordle:
-    def __init__(self, length=None, word=None):
+    def __init__(self, length=None, answer=None):
+        if length is not None and answer is not None:
+            assert len(answer) == length, "Answer must match word length"
+        length = len(answer) if answer is not None else length
         self.length = length if length is not None else DEFAULT_LETTER_COUNT
         self.all_words = make.possible_words(length=self.length)
-        if word is None:
-            self.target = random.choice(list(self.all_words)).upper()
+        if answer is None:
+            self.answer = random.choice(list(self.all_words)).upper()
         else:
-            additional = make.get_clean_words(words=[word])
+            additional = make.get_clean_words(words=[answer])
             self.all_words = self.all_words.union(additional)
-            self.target = word.upper()
+            self.answer = answer.upper()
         self.max_attempts = MAX_ATTEMPTS
         self.attempts = {}
 
     def play(self):
         attempt = 1
-        outcome = "Fail"
-        while attempt < self.max_attempts:
+        result = FAIL
+        while attempt <= self.max_attempts:
             guess = self.guess(attempt)
-            result = self.check(guess)
-            self.attempts[attempt] = result
-            print("{0}> {1} -> {2}".format(attempt, guess, result))
-            if result == self.target:
-                outcome = "Success"
+            response = self.check(guess)
+            self.attempts[attempt] = response
+            print("{0}> {1} -> {2}".format(attempt, guess, response))
+            if response == self.answer:
+                result = SUCCESS
                 break
             else:
                 attempt += 1
-        return outcome
+        return result
 
     def guess(self, attempt):
         guess = input("Guess {attempt}: ".format(attempt=attempt))
@@ -66,7 +74,7 @@ class Wordle:
         output = ["."] * self.length
         guess = guess.upper()
         # Rule #1
-        answer = list(self.target)
+        answer = list(self.answer)
         for i in reversed(range(self.length)):
             if guess[i] == answer[i]:
                 output[i] = answer.pop(i)
@@ -80,16 +88,15 @@ class Wordle:
 def main(args=None):
     args = sys.argv[1:] if args is None else args
     parser = argparse.ArgumentParser()
-    parser.add_argument("--word", dest="word", type=str, nargs="?", default=None)
+    parser.add_argument("-a", "--answer", dest="answer", type=str, default=None)
     args = parser.parse_args()
-    word = args.word
     try:
-        wordle = Wordle(word=word)
-        outcome = wordle.play()
+        wordle = Wordle(answer=args.answer)
+        result = wordle.play()
     except KeyboardInterrupt:
-        outcome = "\nGive up"
+        result = "\n" + QUIT
     finally:
-        print("{}. Answer: {}".format(outcome, wordle.target))
+        print("{}. Answer: {}".format(result, wordle.answer))
 
 
 if __name__ == "__main__":  # pragma: no cover
