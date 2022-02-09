@@ -2,7 +2,7 @@ import string
 import subprocess
 import sys
 
-import pytest 
+import pytest
 
 import makewords
 from makewords.__main__ import main
@@ -30,7 +30,10 @@ def test_include_empty_string():
 
 def test_exclude_two_letters():
     output = makewords.possible_words(
-        words=["foobar", "foobaz", "foobay", "bubbub"], include="faro", exclude="zy", length=6
+        words=["foobar", "foobaz", "foobay", "bubbub"],
+        include="faro",
+        exclude="zy",
+        length=6,
     )
     assert set(["foobar"]) == output
 
@@ -62,7 +65,8 @@ def test_main():
 def test_main_arg_fail():
     with pytest.raises(AssertionError):
         process = subprocess.Popen(
-            [sys.executable, "-m", "makewords", "unrecognized", "arguments"], stdout=subprocess.PIPE
+            [sys.executable, "-m", "makewords", "unrecognized", "arguments"],
+            stdout=subprocess.PIPE,
         )
         out, _ = process.communicate()
         assert not process.returncode

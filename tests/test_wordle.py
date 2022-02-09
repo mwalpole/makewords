@@ -38,11 +38,13 @@ def test_answer_from_possible_words():
     patcher = patch("makewords.game.wordle.make", **config)
     mock_possible_words = patcher.start()
     game = wordle.Wordle()
-    mock_possible_words.possible_words.assert_called_once_with(length=wordle.DEFAULT_LETTER_COUNT)
+    mock_possible_words.possible_words.assert_called_once_with(
+        length=wordle.DEFAULT_LETTER_COUNT
+    )
     assert game.answer == "FOOBAR"
 
 
-@patch("makewords.game.wordle.Wordle.guess") 
+@patch("makewords.game.wordle.Wordle.guess")
 def test_game_play_success(guess):
     game = wordle.Wordle(answer="foobar")
     guess.side_effect = ["foofoo", "foobar"]
@@ -51,7 +53,7 @@ def test_game_play_success(guess):
     assert len(game.attempts) == 2
 
 
-@patch("makewords.game.wordle.Wordle.guess") 
+@patch("makewords.game.wordle.Wordle.guess")
 def test_game_play_fail(guess):
     game = wordle.Wordle(answer="foobar")
     guess.side_effect = ["foofoo"] * wordle.MAX_ATTEMPTS
