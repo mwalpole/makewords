@@ -12,12 +12,11 @@ import makewords.makewords as make
 DEFAULT_LETTER_COUNT = 5
 MAX_ATTEMPTS = 6
 # Result states
-FAIL = "Fail"
+FAIL = "Unlucky"
 QUIT = "Quit"
 SUCCESS = "Success"
 
-# Add session to pick up where we left off or start from particular state
-
+# TODO Add session state and connection (cli, http)
 
 class Wordle:
     def __init__(self, length=None, answer=None):
@@ -44,7 +43,7 @@ class Wordle:
             guess = self.guess(attempt)
             response = self.check(guess)
             self.attempts[attempt] = response
-            print("{0}> {1} -> {2}".format(attempt, guess, response))
+            print(f"{attempt}> {guess} -> {response}")
             if response == self.answer:
                 result = SUCCESS
                 break
@@ -62,7 +61,7 @@ class Wordle:
         if guess in self.all_words:
             ok = True
         if not ok:
-            print("{} is not in wordlist. Try again.".format(guess))
+            print(f"{guess} is not in wordlist. Try again.")
             guess = self.guess(attempt)
         return guess
 
@@ -99,7 +98,7 @@ def main(args=None):
     except KeyboardInterrupt:
         result = "\n" + QUIT
     finally:
-        print("{}. Answer: {}".format(result, wordle.answer))
+        print(f"{result}. Answer: {wordle.answer}")
 
 
 if __name__ == "__main__":  # pragma: no cover
