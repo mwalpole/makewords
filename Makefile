@@ -4,7 +4,7 @@ init:
 	pip install -r requirements.txt
 
 test:
-	tox -e pyt38
+	tox -e pyt39
 
 coverage:
 	pytest --cov-report term-missing --cov makewords tests/
@@ -25,7 +25,7 @@ publish:
 	rm -rf build dist src/*.egg-info
 
 nltk:
-	python3 -m nltk.downloader -d src/makewords/nltk_data/ words
+	sh getdata.sh
 
 clean:
 	rm -rf src/*.egg-info

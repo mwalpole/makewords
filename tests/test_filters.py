@@ -56,7 +56,6 @@ def test_fail_word_length_at_least():
 
 
 def test_apply_iterative_filters():
-    assert set() == filters.apply(["foo"])
     assert set(["foobar"]) == filters.apply(words=["foobar"], include="fobar")
     assert set() == filters.apply(["foobar"], include="fobar", length=5)
     assert set(["foobar"]) == filters.apply(["foobar"], include="fobar", length=6)

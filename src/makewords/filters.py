@@ -1,8 +1,6 @@
+import collections
 import string
 from functools import partial
-
-from makewords.conf import MIN_LENGTH
-from makewords.util import count_letters
 
 
 def word_length_equals(length, word):
@@ -64,11 +62,17 @@ def word_is_ascii_lowercase(word):
 def word_matches_letter_count_from_include(include, match_count, word):
     flag = True
     if match_count:
-        letter_count = count_letters(word)
+        letter_count = collections.Counter(word)
         for letter in include:
             if include.count(letter) != letter_count[letter]:
                 flag = False
     return flag
+
+
+def many(filters, iterable):
+    for f in filters:
+        iterable = filter(f, iterable)
+    return set(iterable)
 
 
 def apply(
@@ -80,14 +84,11 @@ def apply(
     length=None,
     mask=None,
 ):
-    all_filters = (
-        partial(word_length_at_least, MIN_LENGTH),
+    filters = (
         partial(word_length_equals, length),
         partial(word_matches_mask, mask),
         partial(word_contains_letter, include, only),
         partial(word_contains_excluded_letter, exclude),
         partial(word_matches_letter_count_from_include, include, match_count),
     )
-    for f in all_filters:
-        words = filter(f, words)
-    return set(words)
+    return many(filters, words)

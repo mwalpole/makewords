@@ -1,1 +1,1 @@
-graft src/makewords/nltk_data
+include src/makewords/data/words.dat

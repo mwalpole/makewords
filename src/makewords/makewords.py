@@ -1,28 +1,6 @@
-import nltk
-from nltk.corpus import words as nltklib
+import importlib.resources
 
-import makewords.filters as filters
-import makewords.conf as conf
-import makewords.util as util
-
-# os.environ['NLTK_DATA'] = NLTK_DIR not working
-# in the meantime just append the path directly
-nltk.data.path.append(conf.NLTK_DIR)
-
-
-def get_clean_words(words=None):
-    """Retrieve and clean words from NLTK or custom list.
-
-    Cleaning here amounts to dropping words with captials
-    or non-ascii characters.
-    """
-    if words is None:
-        util.print_message("Cleaning 'en' wordlist from nltk.")
-        words = nltklib.words()
-    else:
-        util.print_message("Using words provided by user.")
-    clean_words = set(filter(filters.word_is_ascii_lowercase, set(words)))
-    return clean_words
+import makewords.filters
 
 
 def possible_words(
@@ -34,7 +12,7 @@ def possible_words(
     length=None,
     mask=None,
 ):
-    """Identify words that can be made from a list of letters.
+    """Return words from that meet the filter criteria.
 
     Parameters
     ----------
@@ -55,13 +33,12 @@ def possible_words(
     """
     if include is not None and exclude is not None:
         shared = set(include).intersection(exclude)
-        assert not shared, "Cannot include and exclude the same letter(s): {}".format(", ".join(shared)) 
-
+        assert not shared, f"Cannot both include and exclude: {','.join(shared)}"
     if mask is not None and length is None:
         length = len(mask)
-
-    words = get_clean_words(words=words)
-    words = filters.apply(
+    if words is None:
+        words = importlib.resources.read_text("makewords.data", "words.dat").split("\n")
+    words = makewords.filters.apply(
         words,
         include=include,
         only=only,

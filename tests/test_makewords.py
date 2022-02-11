@@ -48,7 +48,7 @@ def test_length_matches_mask():
     assert output == set([WORD_1])
 
 
-def test_nltk():
+def test_random_word():
     output = makewords.possible_words(include="make", length=4)
     assert "make" in output
 
