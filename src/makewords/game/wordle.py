@@ -4,6 +4,7 @@
 # Score session
 import argparse
 import random
+import string
 import sys
 
 import makewords.makewords as make
@@ -28,8 +29,10 @@ class Wordle:
         if answer is None:
             self.answer = random.choice(list(self.all_words)).upper()
         else:
-            additional = make.get_clean_words(words=[answer])
-            self.all_words = self.all_words.union(additional)
+            assert set(answer).issubset(
+                string.ascii_lowercase
+            ), "Answer must be lowecase ascii only"
+            self.all_words = self.all_words.union(answer)
             self.answer = answer.upper()
         self.max_attempts = MAX_ATTEMPTS
         self.attempts = {}
