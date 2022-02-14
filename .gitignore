@@ -17,8 +17,8 @@ venv/
 **/nltk_data/
 
 # EDA
-*.txt
-*.csv
+data/**/*.csv
+data/**/*.txt
 
 # Testing
 .pytest_cache/
