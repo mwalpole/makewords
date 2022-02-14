@@ -25,7 +25,8 @@ publish:
 	rm -rf build dist src/*.egg-info
 
 nltk:
-	sh getdata.sh
+	sh data/raw/import.sh
+	python3 data/processed/import.py
 
 clean:
 	rm -rf src/*.egg-info

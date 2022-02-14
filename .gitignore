@@ -16,6 +16,10 @@ venv/
 # Package Data
 **/nltk_data/
 
+# EDA
+*.txt
+*.csv
+
 # Testing
 .pytest_cache/
 .tox/
