@@ -23,7 +23,7 @@ def main(args=None):
         type=str,
         nargs="?",
         default=None,
-        help="use these letters",
+        help="use any of these letters",
     )
     parser.add_argument(
         "-o",
@@ -33,6 +33,15 @@ def main(args=None):
         nargs="?",
         default=False,
         help="only use included letters",
+    )
+    parser.add_argument(
+        "-r",
+        "--require",
+        dest="require",
+        type=str,
+        nargs="?",
+        default=None,
+        help="must use these letters",
     )
     parser.add_argument(
         "-c",
@@ -62,6 +71,14 @@ def main(args=None):
         help="make words of this many letters",
     )
     parser.add_argument(
+        "-a",
+        "--at_least",
+        dest="at_least",
+        type=bool,
+        default=False,
+        help="make words of at least \{length\} letters",
+    )
+    parser.add_argument(
         "-m",
         "--mask",
         dest="mask",
@@ -75,17 +92,21 @@ def main(args=None):
     words = args.words.split(",") if args.words is not None else None
     include = args.include
     only = args.only
+    require = args.require
     match_count = args.match_count
     exclude = args.exclude
     length = args.length
+    at_least = args.at_least
     mask = args.mask
     words = possible_words(
         words=words,
         include=include,
         only=only,
+        require=require,
         match_count=match_count,
         exclude=exclude,
         length=length,
+        at_least=at_least,
         mask=mask,
     )
     print(words)

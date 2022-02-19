@@ -18,11 +18,21 @@ def test_word_matches_mask():
 
 
 def test_word_contains_letter():
-    assert filters.word_contains_letter("b", False, "foob")
+    assert filters.word_contains_letter("b", False, None, "foob")
+
+
+def test_word_contains_only_included_letters():
+    assert filters.word_contains_letter("fobar", True, None, "foobar")
+    assert not filters.word_contains_letter("fobar", True, None, "foobaz")
+
+
+def test_word_must_include_required_letters():
+    assert filters.word_contains_letter("b", False, "f", "foob")
+    assert not filters.word_contains_letter("b", False, "r", "foob")
 
 
 def test_word_contains_letter_include_none():
-    assert filters.word_contains_letter(None, False, "foob")
+    assert filters.word_contains_letter(None, False, None, "foob")
 
 
 def test_word_contains_excluded_letter():
@@ -72,7 +82,9 @@ def test_fail_word_matches_mask():
 
 def test_fail_word_contains_letter():
     with pytest.raises(AssertionError):
-        assert filters.word_contains_letter(include="x", only=True, word="foob")
+        assert filters.word_contains_letter(
+            include="foobar", only=True, require=None, word="foobaz"
+        )
 
 
 def test_fail_word_contains_excluded_letter():
@@ -88,7 +100,7 @@ def test_fail_word_is_ascii_lowercase():
         assert filters.word_is_ascii_lowercase("Foob")
 
 
-def test_fail_word_matches_specified_count_of_lettesr_to_include():
+def test_fail_word_matches_specified_count_of_letters_to_include():
     with pytest.raises(AssertionError):
         assert filters.word_matches_letter_count_from_include(
             include="fobar", match_count=True, word="foobar"

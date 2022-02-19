@@ -11,10 +11,10 @@ def word_length_equals(length, word):
     return flag
 
 
-def word_length_at_least(length, word):
+def word_length_at_least(min_length, word):
     flag = True
-    if length is not None:
-        if len(word) < length:
+    if min_length is not None:
+        if len(word) < min_length:
             flag = False
     return flag
 
@@ -32,16 +32,18 @@ def word_matches_mask(mask, word):
     return flag
 
 
-def word_contains_letter(include, only, word):
+def word_contains_letter(include, only, require, word):
     flag = True
     if include is not None:
-        if only and not set(word).issubset(include):
-            flag = False
+        if only:
+            flag = set(word).issubset(include)
         else:
             for letter in include:
                 if letter not in word:
                     flag = False
                     break
+    if flag and require is not None:
+        flag = set(require).issubset(word)
     return flag
 
 
@@ -79,15 +81,18 @@ def apply(
     words,
     include=None,
     only=False,
+    require=None,
     match_count=False,
     exclude=None,
     length=None,
+    min_length=None,
     mask=None,
 ):
     filters = (
         partial(word_length_equals, length),
+        partial(word_length_at_least, min_length),
         partial(word_matches_mask, mask),
-        partial(word_contains_letter, include, only),
+        partial(word_contains_letter, include, only, require),
         partial(word_contains_excluded_letter, exclude),
         partial(word_matches_letter_count_from_include, include, match_count),
     )
