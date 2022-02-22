@@ -46,7 +46,11 @@ def possible_words(
         length = len(mask)
     if words is None:
         words = importlib.resources.read_text("makewords.data", "words.dat").split("\n")
-    min_length = length if at_least else MIN_WORD_LENGTH
+    if at_least:
+        min_length = length
+        length = None
+    else:
+        min_length = MIN_WORD_LENGTH
     words = makewords.filters.apply(
         words,
         include=include,
