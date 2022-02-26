@@ -43,6 +43,11 @@ def test_include_and_exclude_same_letter_fails():
         makewords.possible_words(include="ab", exclude="bc")
 
 
+def test_length_at_least():
+    output = makewords.possible_words(words=WORDS, length=5, at_least=True)
+    assert output == set([WORD_1])
+
+
 def test_length_matches_mask():
     output = makewords.possible_words(words=WORDS, mask="." * len(WORD_1))
     assert output == set([WORD_1])
