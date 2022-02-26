@@ -33,6 +33,6 @@ clean:
 	python3 -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
 	python3 -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
 
-prefect:
+dataflow:
 	export PREFECT__FLOWS__CHECKPOINTING=true
-	python data/etl.py
+	python data/flow/run.py
