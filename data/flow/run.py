@@ -7,7 +7,7 @@ from prefect import task
 from prefect.engine.results import LocalResult
 
 import makewords.filters as filters
-from util import format_loc, format_dir, ReadableListSerializer, ReadableDictSerializer
+from data.flow.util import format_loc, format_dir, ReadableListSerializer, ReadableDictSerializer
 
 LANGUAGES = ("en", "ga")
 
@@ -57,9 +57,8 @@ def store_counts(words):
 
 def main():
     with prefect.Flow("words") as flow:
-        # all_words = import_words_en()
-        # words = clean_words(all_words)
-        words = ["test", "test2"]
+        all_words = import_words_en()
+        words = clean_words(all_words)
         store_words(words)
         store_counts(words)
 

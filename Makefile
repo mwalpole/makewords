@@ -1,16 +1,9 @@
 .PHONY:
-init:
-	sh venv/bin/activate
-	pip install -r requirements.txt
-
 test:
 	tox -e pyt39
 
 coverage:
 	pytest --cov-report term-missing --cov makewords tests/
-
-lint:
-	tox -e linter
 
 black:
 	black src
@@ -19,14 +12,8 @@ black:
 flake8:
 	flake8 --ignore=E501 src
 
-publish:
-	pip install 'twine>=1.5.0'
-	twine upload --repository testpypi dist/*
-	rm -rf build dist src/*.egg-info
-
-nltk:
-	sh data/raw/import.sh
-	python3 data/processed/import.py
+lint:
+	tox -e linter
 
 clean:
 	rm -rf src/*.egg-info
@@ -35,4 +22,22 @@ clean:
 
 dataflow:
 	export PREFECT__FLOWS__CHECKPOINTING=true
-	python data/flow/run.py
+	python -m data.flow.run
+
+init:
+	sh venv/bin/activate
+	python -m piptools sync requirements-dev.txt
+	pip install -e .
+
+init-full:
+	rm -rf venv
+	python -m venv venv
+	sh venv/bin/activate
+	python -m pip install --upgrade pip
+	python -m pip install pip-tools
+	python -m piptools compile --extra data --extra lint --extra notebooks --extra tests -o requirements-dev.txt
+
+publish:
+	pip install 'twine>=1.5.0'
+	twine upload --repository testpypi dist/*
+	rm -rf build dist src/*.egg-info

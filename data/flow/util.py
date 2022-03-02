@@ -1,26 +1,23 @@
-import os
+import importlib.resources
 import pendulum
 from slugify import slugify
 
 import prefect
 from prefect.engine.serializers import Serializer
 
-RAW_DIR = "local/01-raw/en"
-PROCESSED_DIR = "local/02-processed/en"
-CLEAN_DIR = "local/03-clean/en"
-
 logger = prefect.context.get("logger")
+
+LOCAL_BASE_PATH = importlib.resources.files("data.local")
 
 
 def format_dir(suffix: str) -> str:
-    return os.path.join(os.path.dirname(__file__), "..", RAW_DIR, suffix)
+    return LOCAL_BASE_PATH.joinpath("raw/en", suffix)
 
 
 def format_loc(task_name: str, **kwargs) -> str:
     ts = slugify(pendulum.now("utc").isoformat())
     filename = f"{task_name}_{ts}.dat"
-    filepath = os.path.join(os.path.dirname(__file__), "..", PROCESSED_DIR, filename)
-    logger.info(f"Writing {filepath}")
+    filepath = LOCAL_BASE_PATH.joinpath("processed/en", filename)
     return filepath
 
 
