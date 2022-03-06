@@ -2,8 +2,11 @@
 test:
 	tox -e pyt39
 
-coverage:
-	pytest --cov-report term-missing --cov makewords tests/
+test_all:
+	pytest --cov-report term-missing --cov makewords tests/makewords/ --cov data tests/data/
+
+test_data:
+	pytest --cov-report term-missing --cov data tests/data/
 
 black:
 	black src

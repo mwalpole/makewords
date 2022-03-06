@@ -11,14 +11,14 @@ LOCAL_BASE_PATH = importlib.resources.files("data.local")
 
 
 def format_dir(suffix: str) -> str:
-    return LOCAL_BASE_PATH.joinpath("raw/en", suffix)
+    return str(LOCAL_BASE_PATH.joinpath("raw/en", suffix))
 
 
 def format_loc(task_name: str, **kwargs) -> str:
     ts = slugify(pendulum.now("utc").isoformat())
     filename = f"{task_name}_{ts}.dat"
     filepath = LOCAL_BASE_PATH.joinpath("processed/en", filename)
-    return filepath
+    return str(filepath)
 
 
 class ReadableListSerializer(Serializer):
