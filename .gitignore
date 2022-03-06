@@ -14,8 +14,8 @@ dist/
 venv/
 
 # Package Data
-**/nltk_data/
-*.dat
+data/**/nltk_data/
+data/**/*.dat
 
 # EDA
 data/**/*.csv

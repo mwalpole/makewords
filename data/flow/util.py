@@ -30,8 +30,12 @@ class ReadableListSerializer(Serializer):
 
 
 class ReadableDictSerializer(Serializer):
+    def _splitc(self, word_and_count):
+        w, c = word_and_count.split(",")
+        return w, int(c)
+
     def deserialize(self, value: bytes) -> dict:
-        return dict(wc.split(",") for wc in value.decode().split("\n"))
+        return dict(self._splitc(wc) for wc in value.decode().split("\n"))
 
     def serialize(self, value: dict) -> bytes:
         return "\n".join((f"{w},{c}" for w, c in value.items())).encode()
