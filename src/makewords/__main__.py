@@ -4,8 +4,7 @@ import sys
 from makewords.makewords import possible_words
 
 
-def main(args=None):
-    args = sys.argv[1:] if args is None else args
+def get_parser():
     parser = argparse.ArgumentParser(description="Make words from letters.")
     parser.add_argument(
         "-w",
@@ -88,7 +87,16 @@ def main(args=None):
         help="words should look like this, wildcard is '.'",
     )
     parser.add_argument("-v", "--verbose", action="count", default=0)
+    return parser
+
+
+def main(args=None):
+    args = sys.argv[1:] if args is None else args
+    parser = get_parser()
     args = parser.parse_args()
+    if not any(vars(args).values()):  # no args found
+        parser.print_help()           # see https://docs.python.org/3/library/functions.html#vars  
+        return 2
     words = args.words.split(",") if args.words is not None else None
     include = args.include
     only = args.only

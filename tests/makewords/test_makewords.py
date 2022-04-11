@@ -60,18 +60,46 @@ def test_random_word():
 
 def test_main():
     process = subprocess.Popen(
-        [sys.executable, "-m", "makewords", "--words=talo"], stdout=subprocess.PIPE
+        [sys.executable, "-m", "makewords", "--words=talo"], 
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    out, _ = process.communicate()
+    out, err = process.communicate()
+    print(out, err, process.returncode)
     assert not process.returncode
     assert out
 
 
-def test_main_arg_fail():
+def test_main_no_args():
+    process = subprocess.Popen(
+        [sys.executable, "-m", "makewords"], 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE,
+    )
+    out, err = process.communicate()
+    assert process.returncode == 2
+    assert out
+    assert not err
+
+
+def test_main_empty_args_unrecognized():
+    process = subprocess.Popen(
+        [sys.executable, "-m", "makewords", ""], 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE,
+    )
+    out, err = process.communicate()
+    assert process.returncode == 2
+    assert not out
+    assert err
+
+
+def test_main_args_unrecognized():
     with pytest.raises(AssertionError):
         process = subprocess.Popen(
             [sys.executable, "-m", "makewords", "unrecognized", "arguments"],
             stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
-        out, _ = process.communicate()
+        out, err = process.communicate()
         assert not process.returncode
